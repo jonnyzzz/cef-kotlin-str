@@ -18,7 +18,7 @@ fun main() = memScoped {
   println("Another trick ${q.foo()}")
 
   val main = object : MainClass(this) {
-    override fun theFunction(x : Int) : CPointer<sub_struct_t>? { return null }
+    override fun theFunction(x : Int) : CPointer<sub_struct_t>? = null
   }
 
   try {
