@@ -24,7 +24,7 @@ See the debugger screenshot for more details:
 ![](debugger-screenshot.png)
 
 As we see from the stacktrace: 
-```cassandraql
+```
 UpdateReturnRef 0x000000010d4316c0
 kfun:org.jonnyzzz.example.object-2.$<bridge-BNNN>theFunction_6(kotlin.Int)kotlin.Nothing?#internal main.kt:20
 kfun:org.jonnyzzz.example.MainClass.<init>$<anonymous>_2#internal lib.kt:57
