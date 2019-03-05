@@ -4,6 +4,7 @@ import kotlinx.cinterop.COpaquePointerVar
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.CStructVar
 import kotlinx.cinterop.CValue
+import kotlinx.cinterop.DeferScope
 import kotlinx.cinterop.MemScope
 import kotlinx.cinterop.NativePtr
 import kotlinx.cinterop.StableRef
@@ -27,12 +28,15 @@ class MainWrapper(rawPtr: NativePtr) : CStructVar(rawPtr) {
   companion object : CStructVar.Type(_main_struct.size + COpaquePointerVar.size, _main_struct.align)
 }
 
+interface MainInterface {
+  fun theFunction(x : Int) : CPointer<sub_struct_t>?
+}
 
-class MainClass {
+abstract class MainClass(defer : DeferScope) : MainInterface {
   val MemScope.ptr: CPointer<_main_struct>?
     get() = cValue.ptr.reinterpret()
 
-  private val stableRef: StableRef<MainClass> = StableRef.create(this)
+  private val stableRef: StableRef<MainClass> = StableRef.create(this).also { defer.defer { it.dispose() } }
 
   private val cValue: CValue<MainWrapper> = cValue {
     stablePtr.value = stableRef.asCPointer()
@@ -45,21 +49,20 @@ class MainClass {
               .get()
 
       pThis.theFunction(param)
-
     }
-  }
-
-  fun theFunction(x : Int) : CPointer<sub_struct_t>? {
-    return null
   }
 }
 
 fun main() = memScoped {
 
-  val main = MainClass()
+  val main = object : MainClass(this) {
+    override fun theFunction(x : Int) : CPointer<sub_struct_t>? {
+
+      return null
+    }
+  }
 
   executeMe(main.run { ptr })
-
 }
 
 
