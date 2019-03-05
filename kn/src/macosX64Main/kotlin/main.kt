@@ -1,5 +1,6 @@
 package org.jonnyzzz.example
 
+import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.memScoped
 
 fun main() = memScoped {
@@ -17,7 +18,7 @@ fun main() = memScoped {
   println("Another trick ${q.foo()}")
 
   val main = object : MainClass(this) {
-    override fun theFunction(x : Int) = null
+    override fun theFunction(x : Int) : CPointer<sub_struct_t>? { return null }
   }
 
   try {
