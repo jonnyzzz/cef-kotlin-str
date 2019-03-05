@@ -1,32 +1,32 @@
-
 plugins {
-    kotlin("multiplatform")
+  kotlin("multiplatform")
 }
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 kotlin {
-    macosX64 {
-        val main by compilations
+  macosX64 {
+    val main by compilations
+    main.kotlinOptions.freeCompilerArgs = listOf("-Xverbose-phases=linker")
 
-        main.kotlinOptions.freeCompilerArgs = listOf("-Xverbose-phases=linker")
+    binaries {
+      executable {
+        entryPoint = "org.jonnyzzz.example.main"
+        linkerOpts.add("-ljonnyzzzcpp")
+        linkerOpts.add("-L${project(":cpp").buildDir}/lib/main/${buildType.name.toLowerCase()}")
 
-        main.cinterops.create("kotlinCefInterop") {
-            defFile("src/nativeInterop/cinterop/kotlinCefInterop.def")
-            packageName = "org.jonnyzzz.example"
-            compilerOpts += "-I${project(":cpp").file("src/main/public")}"
-        }
-
-        binaries {
-            executable {
-                entryPoint = "org.jonnyzzz.example.main"
-                linkerOpts.add("-ljonnyzzzcpp")
-                linkerOpts.add("-L${project(":cpp").buildDir}/lib/main/${buildType.name.toLowerCase()}")
-
-                linkTask.dependsOn(project(":cpp").tasks["link${buildType.name.toLowerCase().capitalize()}"])
-            }
-        }
+        linkTask.dependsOn(project(":cpp").tasks["link${buildType.name.toLowerCase().capitalize()}"])
+      }
     }
+  }
+
+  sourceSets {
+    val macosX64Main by getting {
+      dependencies {
+        implementation(project(":kn2"))
+      }
+    }
+  }
 }
