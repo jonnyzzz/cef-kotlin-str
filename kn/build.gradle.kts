@@ -23,7 +23,9 @@ kotlin {
             executable {
                 entryPoint = "org.jonnyzzz.example.main"
                 linkerOpts.add("-ljonnyzzzcpp")
-                linkerOpts.add("-L${project(":cpp").buildDir}/lib/main/debug")
+                linkerOpts.add("-L${project(":cpp").buildDir}/lib/main/${buildType.name.toLowerCase()}")
+
+                linkTask.dependsOn(project(":cpp").tasks["link${buildType.name.toLowerCase().capitalize()}"])
             }
         }
     }
