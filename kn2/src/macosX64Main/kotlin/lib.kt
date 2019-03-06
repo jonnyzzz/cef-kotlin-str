@@ -54,7 +54,8 @@ abstract class MainClass(defer : DeferScope) : MainInterface {
               .asStableRef<MainClass>()
               .get()
 
-      pThis.theFunction(param)
+      val x : CPointer<sub_struct_t>? = pThis.theFunction(param)
+      x
     }
   }
 }
