@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("gradle-plugin", version = "1.3.21"))
+    compileOnly(kotlin("gradle-plugin", version = "1.3.21"))
 }
 
 kotlinDslPluginOptions {
