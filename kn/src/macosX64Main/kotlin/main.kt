@@ -1,9 +1,23 @@
 package org.jonnyzzz.example
 
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.cValue
 import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.useContents
 
 fun main() = memScoped {
+
+  val s = cValue<value_struct_t> {
+    v = 132
+  }
+
+  println(s.useContents { v })
+  s.useContents { v = 9594 }
+  println(s.useContents { v })
+}
+
+
+fun main2() = memScoped {
 
   println("HEllo! ")
 
