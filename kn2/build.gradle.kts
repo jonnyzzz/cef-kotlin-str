@@ -7,6 +7,25 @@ repositories {
   mavenCentral()
 }
 
+
+class M
+
+run {
+  var cl : ClassLoader?= M().javaClass.classLoader
+  while(cl != null) {
+    println("CL: $cl")
+    val urlcl = cl as? java.net.URLClassLoader
+    if (urlcl != null) {
+      urlcl.getURLs().map {it.toString().split("/").last() }.sorted().forEach {
+        println("    " + it.toString().split("/").last())
+      }
+    }
+    cl = cl.parent
+  }
+}
+
+
+
 kotlin {
   macosX64 {
     val main by compilations
