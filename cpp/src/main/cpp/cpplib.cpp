@@ -11,3 +11,12 @@ void executeMe(const main_struct_t* main) {
   }
 }
 
+
+
+void doSomethingWith(value_struct_t* c) {
+  c->v *= 100;
+}
+
+void doSomethingConst(const value_struct_t* c) {
+  //NOP
+}
