@@ -9,7 +9,6 @@ repositories {
 kotlin {
   macosX64 {
     val main by compilations
-    main.kotlinOptions.freeCompilerArgs = listOf("-Xverbose-phases=linker")
 
     binaries {
       executable {

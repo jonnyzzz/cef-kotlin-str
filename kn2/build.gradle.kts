@@ -10,9 +10,7 @@ repositories {
 kotlin {
   macosX64 {
     val main by compilations
-
-    main.kotlinOptions.freeCompilerArgs = listOf("-Xverbose-phases=linker")
-
+    
     main.cinterops.create("kotlinCefInterop") {
       defFile("src/nativeInterop/cinterop/kotlinCefInterop.def")
       packageName = "org.jonnyzzz.example"
