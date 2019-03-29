@@ -12,7 +12,11 @@ import kotlinx.cinterop.useContents
 
 fun main() = memScoped {
 
-  functionWithCallback(staticCFunction { cValue {} })
+  functionWithCallback(staticCFunction<Int, CValue<sub_struct_t>> {
+    println("AAA")
+    cValue {}
+  }
+  )
 
 
 }
