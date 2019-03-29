@@ -20,3 +20,9 @@ void doSomethingWith(value_struct_t* c) {
 void doSomethingConst(const value_struct_t* c) {
   //NOP
 }
+
+
+void functionWithCallback( sub_struct_t (*foo)(int x) ) {
+  foo(42);
+}
+

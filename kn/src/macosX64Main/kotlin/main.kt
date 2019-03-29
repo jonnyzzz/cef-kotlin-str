@@ -6,7 +6,17 @@ import kotlinx.cinterop.alloc
 import kotlinx.cinterop.cValue
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
+import kotlinx.cinterop.staticCFunction
 import kotlinx.cinterop.useContents
+
+
+fun main() = memScoped {
+
+  functionWithCallback(staticCFunction { cValue {} })
+
+
+}
+
 
 fun main2() = memScoped {
 
@@ -34,7 +44,7 @@ fun main2() = memScoped {
 }
 
 
-fun main() = memScoped {
+fun main3() = memScoped {
 
   println("HEllo! ")
 

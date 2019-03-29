@@ -23,6 +23,9 @@ typedef struct _value_struct {
 } value_struct_t;
 
 
+void functionWithCallback( sub_struct_t (*foo)(int x) );
+void xfunctionWithCallback2() {}
+
 
 void doSomethingWith(value_struct_t* c);
 void doSomethingConst(const value_struct_t* c);
