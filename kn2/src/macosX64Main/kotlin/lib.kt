@@ -3,25 +3,24 @@ package org.jonnyzzz.example
 import kotlinx.cinterop.COpaquePointerVar
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.CStructVar
-import kotlinx.cinterop.CValue
 import kotlinx.cinterop.DeferScope
 import kotlinx.cinterop.MemScope
 import kotlinx.cinterop.NativePtr
 import kotlinx.cinterop.StableRef
+import kotlinx.cinterop.alloc
 import kotlinx.cinterop.asStableRef
-import kotlinx.cinterop.cValue
 import kotlinx.cinterop.memberAt
 import kotlinx.cinterop.pointed
+import kotlinx.cinterop.ptr
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.staticCFunction
 import kotlinx.cinterop.value
 
 interface F {
-  fun foo() : CPointer<_main_struct>?
+  fun foo(): CPointer<_main_struct>?
 }
+
 abstract class Base : F { /* the method is not implemented*/ }
-
-
 
 
 class MainWrapper(rawPtr: NativePtr) : CStructVar(rawPtr) {
@@ -35,16 +34,22 @@ class MainWrapper(rawPtr: NativePtr) : CStructVar(rawPtr) {
 }
 
 interface MainInterface {
-  fun theFunction(x : Int) : CPointer<sub_struct_t>?
+  fun theFunction(x: Int): CPointer<sub_struct_t>?
 }
 
-abstract class MainClass(defer : DeferScope) : MainInterface {
-  val MemScope.ptr: CPointer<_main_struct>?
+inline fun <reified T : Any> DeferScope.stablePtr(obj: T): StableRef<T> {
+  val ptr = StableRef.create(obj)
+  defer { ptr.dispose() }
+  return ptr
+}
+
+abstract class MainClass(scope: MemScope) : MainInterface {
+  val ptr: CPointer<_main_struct>
     get() = cValue.ptr.reinterpret()
 
-  private val stableRef: StableRef<MainClass> = StableRef.create(this).also { defer.defer { it.dispose() } }
+  private val stableRef = scope.stablePtr(this)
 
-  private val cValue: CValue<MainWrapper> = cValue {
+  private val cValue = scope.alloc<MainWrapper> {
     stablePtr.value = stableRef.asCPointer()
     cef.function = staticCFunction { THIS, param ->
       val pThis = THIS!!.reinterpret<MainWrapper>()
@@ -54,9 +59,10 @@ abstract class MainClass(defer : DeferScope) : MainInterface {
               .asStableRef<MainClass>()
               .get()
 
-      val x : CPointer<sub_struct_t>? = pThis.theFunction(param)
+      val x: CPointer<sub_struct_t>? = pThis.theFunction(param)
       x
     }
   }
 }
+
 

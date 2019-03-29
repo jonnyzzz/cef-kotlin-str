@@ -8,7 +8,7 @@ import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
 import kotlinx.cinterop.useContents
 
-fun main() = memScoped {
+fun main2() = memScoped {
 
   val s: CValue<value_struct_t> = cValue {
     v = 132
@@ -34,7 +34,7 @@ fun main() = memScoped {
 }
 
 
-fun main2() = memScoped {
+fun main() = memScoped {
 
   println("HEllo! ")
 
